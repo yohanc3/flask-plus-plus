@@ -1,40 +1,53 @@
 {% extends "layout.html" %}
 {% block body %}
-  <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
-    <dl>
-      <dt>Title:
-      <dd><input type="text" size="30" name="title">
-      <dt>Category:
-      <dd><input type="text" size="30" name="category">
-      <dt>Text:
-      <dd><textarea name="text" rows="5" cols="40"></textarea>
-      <dd><input type="submit" value="Share">
-    </dl>
+  <form action="{{ url_for('add_entry') }}" method="post" class="mb-4">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label>
+      <input type="text" class="form-control" id="title" name="title">
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category:</label>
+      <input type="text" class="form-control" id="category" name="category">
+    </div>
+    <div class="mb-3">
+      <label for="text" class="form-label">Text:</label>
+      <textarea class="form-control" id="text" name="text" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Share</button>
   </form>
-  <h2>Categories</h2>
-  <ul class="categories">
-    <li><a href="?">[all]</a></li>
+
+  <h2 class="mt-4">Categories</h2>
+  <ul class="list-inline">
+    <li class="list-inline-item"><a href="?">[all]</a></li>
   {% for category in categories %}
-    <li><a href="?category={{ category.category }}">{{ category.category }}</a></li>
+    <li class="list-inline-item"><a href="?category={{ category.category }}">{{ category.category }}</a></li>
   {% endfor %}
   </ul>
-  <h2>Posts</h2>
-  <ul class="entries">
+
+  <h2 class="mt-4">Posts</h2>
   {% for entry in entries %}
-    <li>
-        <h3>{{ entry.title }}</h3>
-        <i>[{{ entry.category }}]</i>
-        <p>{{ entry.text|safe }}</p>
-        <!-- A form to submit a delete request for the current entry.
-             Uses a hidden input to be able to pass the current id
-             to the request handler. -->
-        <form action="{{ url_for('delete_entry') }}" method="post">
-          <input type="hidden" name="id" value="{{ entry.id }}">
-          <button type="submit" class="del-button">Delete</button>
-        </form>
-    </li>
+    <div class="mb-3">
+      <div class="row">
+        <div class="col-6">
+          <h5>{{ entry.title }}</h5>
+        </div>
+        <div class="col-3">
+          <em>[{{ entry.category }}]</em>
+        </div>
+        <div class="col-3 text-end">
+          <form action="{{ url_for('delete_entry') }}" method="post" class="d-inline">
+            <input type="hidden" name="id" value="{{ entry.id }}">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <p>{{ entry.text|safe }}</p>
+        </div>
+      </div>
+    </div>
   {% else %}
-    <li><em>Unbelievable.  No entries here so far</em></li>
+    <p><em>Unbelievable.  No entries here so far</em></p>
   {% endfor %}
-  </ul>
 {% endblock %}

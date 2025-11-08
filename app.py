@@ -106,3 +106,6 @@ def delete_entry():
     db.commit()
     flash('Entry deleted')
     return redirect(url_for('show_entries'))
+
+if __name__ == "__main__":
+    app.run(debug=True)
