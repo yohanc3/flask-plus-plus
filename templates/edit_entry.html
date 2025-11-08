@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Edit Entry</h2>
+  <form action="{{ url_for('update_entry') }}" method="post">
+    <input type="hidden" name="id" value="{{ entry.id }}">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label>
+      <input type="text" class="form-control" id="title" name="title" value="{{ entry.title }}">
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category:</label>
+      <input type="text" class="form-control" id="category" name="category" value="{{ entry.category }}">
+    </div>
+    <div class="mb-3">
+      <label for="text" class="form-label">Text:</label>
+      <textarea class="form-control" id="text" name="text" rows="5">{{ entry.text }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{{ url_for('show_entries') }}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}

@@ -107,5 +107,25 @@ def delete_entry():
     flash('Entry deleted')
     return redirect(url_for('show_entries'))
 
+
+@app.route('/edit/<int:entry_id>')
+def edit_entry(entry_id):
+    """Shows the edit form for a specific post"""
+    db = get_db()
+    cur = db.execute('SELECT id, title, category, text FROM entries WHERE id = ?', [entry_id])
+    entry = cur.fetchone()
+    return render_template('edit_entry.html', entry=entry)
+
+
+@app.route('/update', methods=['POST'])
+def update_entry():
+    """Updates an existing post"""
+    db = get_db()
+    db.execute('UPDATE entries SET title = ?, category = ?, text = ? WHERE id = ?',
+               [request.form['title'], request.form['category'], request.form['text'], request.form['id']])
+    db.commit()
+    flash('Entry updated')
+    return redirect(url_for('show_entries'))
+
 if __name__ == "__main__":
     app.run(debug=True)
