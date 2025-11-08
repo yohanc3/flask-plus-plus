@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+  <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+    <dl>
+      <dt>Title:
+      <dd><input type="text" size="30" name="title">
+      <dt>Category:
+      <dd><input type="text" size="30" name="category">
+      <dt>Text:
+      <dd><textarea name="text" rows="5" cols="40"></textarea>
+      <dd><input type="submit" value="Share">
+    </dl>
+  </form>
+  <h2>Categories</h2>
+  <ul class="categories">
+    <li><a href="?">[all]</a></li>
+  {% for category in categories %}
+    <li><a href="?category={{ category.category }}">{{ category.category }}</a></li>
+  {% endfor %}
+  </ul>
+  <h2>Posts</h2>
+  <ul class="entries">
+  {% for entry in entries %}
+    <li>
+        <h3>{{ entry.title }}</h3>
+        <i>[{{ entry.category }}]</i>
+        <p>{{ entry.text|safe }}</p>
+        <!-- A form to submit a delete request for the current entry.
+             Uses a hidden input to be able to pass the current id
+             to the request handler. -->
+        <form action="{{ url_for('delete_entry') }}" method="post">
+          <input type="hidden" name="id" value="{{ entry.id }}">
+          <button type="submit" class="del-button">Delete</button>
+        </form>
+    </li>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
